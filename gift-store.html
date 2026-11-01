@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pirate Gift Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+<style>
+  :root { --display: 'Anton', 'Segoe UI', sans-serif; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #091327;
+    --card: #13213A;
+    --search: #15233A;
+    --border: #35445D;
+    --yellow: #FFE000;
+    --gold: #D5A13D;
+    --white: #FFFFFF;
+    --text2: #A8B6CD;
+    --muted: #8493AA;
+  }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    color: var(--white);
+    background:
+      radial-gradient(900px 500px at 20% -10%, rgba(255,255,255,0.5), transparent 60%),
+      radial-gradient(800px 500px at 90% 10%, rgba(255,255,255,0.35), transparent 60%),
+      linear-gradient(180deg, #d7ecff 0%, #a9d2ff 55%, #8ec2ff 100%);
+    background-attachment: fixed;
+  }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-icon {
+    width: 36px; height: 36px;
+    background: var(--yellow);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .brand-name {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #0b1830;
+  }
+  .online {
+    display: flex; align-items: center; gap: 7px;
+    background: rgba(34,197,94,0.12);
+    border: 1px solid rgba(34,197,94,0.35);
+    color: #4ade80;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+  .online .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34,197,94,0.8);
+  }
+
+  /* HERO */
+  .hero { text-align: center; padding: 48px 0 8px; }
+  .hero h1 {
+    font-family: var(--display);
+    font-size: 44px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #0b1830;
+    margin-bottom: 8px;
+  }
+  .hero p {
+    font-size: 15px;
+    color: #2d4463;
+  }
+
+  /* SEARCH */
+  .search-wrap {
+    max-width: 460px;
+    margin: 28px auto 0;
+    background: var(--search);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    position: relative;
+  }
+  .search-row { display: flex; gap: 10px; }
+  #username {
+    flex: 1;
+    padding: 13px 15px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #0d1a30;
+    color: var(--white);
+    font-size: 15px;
+    outline: none;
+  }
+  #username::placeholder { color: var(--muted); }
+  #username:focus { border-color: var(--yellow); }
+  #searchBtn {
+    background: var(--yellow);
+    color: #0b1830;
+    border: none;
+    border-radius: 10px;
+    padding: 0 20px;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  #searchBtn:hover { filter: brightness(1.05); }
+  .dropdown {
+    position: absolute;
+    top: 68px;
+    left: 18px;
+    right: 18px;
+    background: #0d1a30;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.5);
+    display: none;
+    z-index: 20;
+  }
+  .dropdown div {
+    padding: 12px 16px;
+    color: var(--text2);
+    cursor: pointer;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(53,68,93,0.4);
+  }
+  .dropdown div:last-child { border-bottom: none; }
+  .dropdown div:hover { background: #15233A; color: var(--white); }
+  .recipient {
+    margin-top: 16px;
+    text-align: center;
+    color: var(--text2);
+    font-size: 14px;
+    font-weight: 600;
+    min-height: 20px;
+  }
+  .recipient b { color: var(--yellow); }
+
+  /* PRODUCT CARD */
+  .card {
+    max-width: 320px;
+    margin: 40px auto 60px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+  }
+  .card-top {
+    padding: 28px 24px 22px;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(213,161,61,0.08), transparent);
+  }
+  .card .label {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .card .qty {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .emblem { width: 130px; height: 130px; margin: 0 auto; display: block; }
+  .card .price {
+    font-family: var(--display);
+    background: var(--yellow);
+    color: #0b1830;
+    font-weight: 400;
+    font-size: 24px;
+    letter-spacing: 1px;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: filter 0.15s;
+  }
+  .card .price:hover { filter: brightness(1.05); }
+
+  /* CHECKOUT MODAL */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(5,10,22,0.78);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 20px; z-index: 50;
+  }
+  .overlay.open { display: flex; }
+  .modal {
+    width: 100%; max-width: 380px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+  }
+  .modal-head {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .modal-head h3 { font-size: 17px; font-weight: 800; color: var(--white); }
+  .modal-close {
+    background: none; border: none; color: var(--muted);
+    font-size: 22px; cursor: pointer; line-height: 1;
+  }
+  .modal-body { padding: 22px; }
+  .row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 11px 0; font-size: 14px;
+    border-bottom: 1px solid rgba(53,68,93,0.4);
+  }
+  .row:last-of-type { border-bottom: none; }
+  .row .k { color: var(--text2); }
+  .row .v { color: var(--white); font-weight: 700; }
+  .row .v.coins { color: var(--gold); }
+  .coin::before { content: "🪙 "; }
+  .balance {
+    margin: 14px 0 18px;
+    font-size: 13px; color: var(--muted);
+    text-align: right;
+  }
+  .confirm-btn {
+    width: 100%;
+    background: var(--yellow); color: #0b1830;
+    border: none; border-radius: 12px;
+    padding: 14px; font-size: 15px; font-weight: 800;
+    cursor: pointer;
+  }
+  .confirm-btn:hover { filter: brightness(1.05); }
+  .confirm-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .demo-note {
+    margin-top: 12px; text-align: center;
+    font-size: 11px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .success {
+    text-align: center; padding: 10px 0 4px;
+  }
+  .success .check {
+    width: 56px; height: 56px; margin: 0 auto 14px;
+    border-radius: 50%;
+    background: rgba(34,197,94,0.15);
+    border: 1px solid rgba(34,197,94,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; color: #4ade80;
+  }
+  .success h4 { color: var(--white); font-size: 18px; margin-bottom: 6px; }
+  .success p { color: var(--text2); font-size: 14px; }
+
+  /* MOBILE */
+  @media (max-width: 620px) {
+    .container { padding: 0 16px; }
+    .hero h1 { font-size: 28px; }
+    .brand-name { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <header>
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#0b1830" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 7h-2.18A3 3 0 0 0 12 4.35 3 3 0 0 0 6.18 7H4a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h1v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7h1a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1Zm-5-2a1 1 0 1 1-1 1 1 1 0 0 1 1-1ZM9 5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm2 14H7v-7h4Zm0-9H5V9h6Zm6 9h-4v-7h4Zm2-9h-6V9h6Z"/>
+          </svg>
+        </div>
+        <span class="brand-name">Pirate Gift Shop</span>
+      </div>
+      <div class="online"><span class="dot"></span>Online</div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <h1>Find Your Next Gift</h1>
+      <p>Enter a username to explore available gifts.</p>
+    </section>
+
+    <!-- SEARCH -->
+    <div class="search-wrap">
+      <div class="search-row">
+        <input type="text" id="username" placeholder="Type a username..." autocomplete="off">
+        <button id="searchBtn">Search User</button>
+      </div>
+      <div class="dropdown" id="dropdown"></div>
+    </div>
+    <div class="recipient" id="recipient"></div>
+
+    <!-- PRODUCT CARD -->
+    <div class="card">
+      <div class="card-top">
+        <div class="label">Pirate Gift Shop</div>
+        <div class="qty">x1</div>
+        <svg class="emblem" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="coin" cx="42%" cy="36%" r="72%">
+              <stop offset="0%" stop-color="#ffe6a3"/>
+              <stop offset="55%" stop-color="#D5A13D"/>
+              <stop offset="100%" stop-color="#8a5f20"/>
+            </radialGradient>
+            <linearGradient id="pt" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ffdd8f"/>
+              <stop offset="100%" stop-color="#9c6f22"/>
+            </linearGradient>
+            <radialGradient id="gem" cx="40%" cy="35%" r="78%">
+              <stop offset="0%" stop-color="#fff2c8"/>
+              <stop offset="60%" stop-color="#f0b94c"/>
+              <stop offset="100%" stop-color="#b9731c"/>
+            </radialGradient>
+          </defs>
+          <!-- coin base -->
+          <circle cx="80" cy="80" r="74" fill="url(#coin)" stroke="#6f4c16" stroke-width="4"/>
+          <circle cx="80" cy="80" r="62" fill="none" stroke="#6f4c16" stroke-width="3" opacity="0.45"/>
+          <!-- 8-point compass -->
+          <g fill="url(#pt)" stroke="#6f4c16" stroke-width="1">
+            <polygon points="80,6 88,74 72,74"/>
+            <polygon points="80,154 88,86 72,86"/>
+            <polygon points="6,80 74,88 74,72"/>
+            <polygon points="154,80 86,88 86,72"/>
+            <polygon points="26,26 78,74 74,78"/>
+            <polygon points="134,134 82,86 86,82"/>
+            <polygon points="134,26 86,74 82,78"/>
+            <polygon points="26,134 74,86 78,82"/>
+          </g>
+          <!-- center gem -->
+          <circle cx="80" cy="80" r="42" fill="url(#gem)" stroke="#8a5a16" stroke-width="3"/>
+          <circle cx="80" cy="80" r="42" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+          <!-- letter (swap the P and font-family as you like) -->
+          <text x="80" y="100" text-anchor="middle" font-family="Anton, sans-serif"
+                font-size="58" fill="#fff" stroke="#8a5a16" stroke-width="1.2">G</text>
+        </svg>
+      </div>
+      <div class="price" id="buyBtn">€8.99</div>
+    </div>
+
+  </div>
+
+  <!-- CHECKOUT MODAL (demo, in-game currency, no real payment) -->
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="modalTitle">Confirm your gift</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Sample usernames to filter — replace with your own.
+  const users = ["Luke4386", "GamerForlife912", "r_rl_ey15", "xmars", "Nova_77", "PixelKing", "ShadowByte"];
+
+  const input = document.getElementById('username');
+  const dropdown = document.getElementById('dropdown');
+  const recipient = document.getElementById('recipient');
+
+  function setRecipient(name) {
+    recipient.innerHTML = 'Gift Recipient: <b>' + name + '</b>';
+  }
+
+  function addOption(name) {
+    const d = document.createElement('div');
+    d.textContent = name;
+    d.onclick = () => {
+      input.value = name;
+      dropdown.style.display = 'none';
+      setRecipient(name);
+    };
+    dropdown.appendChild(d);
+  }
+
+  function showMatches() {
+    const raw = input.value.trim();
+    const q = raw.toLowerCase();
+    dropdown.innerHTML = '';
+    if (!q) { dropdown.style.display = 'none'; return; }
+
+    // Always show the exact typed username as a pickable entry.
+    addOption(raw);
+
+    // Then any sample names that match but aren't identical to what was typed.
+    users
+      .filter(u => u.toLowerCase().includes(q) && u.toLowerCase() !== q)
+      .forEach(addOption);
+
+    dropdown.style.display = 'block';
+  }
+
+  input.addEventListener('input', showMatches);
+  document.getElementById('searchBtn').addEventListener('click', () => {
+    const name = input.value.trim();
+    if (name) { setRecipient(name); dropdown.style.display = 'none'; }
+  });
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.search-wrap')) dropdown.style.display = 'none';
+  });
+
+  /* ---- DEMO CHECKOUT (in-game currency, no real payment) ---- */
+  const COST = 8.99;          // price per gift
+  let balance = 1000000;      // wallet balance (decreases per purchase)
+  const money = n => '€' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const overlay = document.getElementById('overlay');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalBody = document.getElementById('modalBody');
+
+  function currentRecipient() {
+    const name = input.value.trim();
+    return name || null;
+  }
+
+  function openCheckout() {
+    const rcpt = currentRecipient();
+    modalTitle.textContent = 'Confirm your gift';
+
+    if (!rcpt) {
+      modalBody.innerHTML =
+        '<p style="color:var(--text2);font-size:14px;line-height:1.5;">' +
+        'Enter a username above and pick a recipient first, then tap the price to send the gift.</p>' +
+        '<button class="confirm-btn" style="margin-top:16px;" id="okBtn">Got it</button>';
+      document.getElementById('okBtn').onclick = closeCheckout;
+      overlay.classList.add('open');
+      return;
+    }
+
+    const canAfford = balance >= COST;
+    modalBody.innerHTML =
+      '<div class="row"><span class="k">Item</span><span class="v">Pirate Gift Shop &times;1</span></div>' +
+      '<div class="row"><span class="k">Recipient</span><span class="v">' + rcpt + '</span></div>' +
+      '<div class="row"><span class="k">Cost</span><span class="v">' + money(COST) + '</span></div>' +
+      '<button class="confirm-btn" id="confirmBtn" style="margin-top:6px;">Confirm Gift</button>';
+
+    document.getElementById('confirmBtn').onclick = () => showSuccess(rcpt);
+    overlay.classList.add('open');
+  }
+
+  function showSuccess(rcpt) {
+    modalTitle.textContent = 'Success';
+    modalBody.innerHTML =
+      '<div class="success">' +
+        '<div class="check">&#10003;</div>' +
+        '<h4>Gift sent!</h4>' +
+        '<p>Pirate Gift Shop &times;1 was gifted to <b style="color:var(--yellow)">' + rcpt + '</b>.</p>' +
+      '</div>' +
+      '<button class="confirm-btn" style="margin-top:18px;" id="doneBtn">Done</button>';
+    document.getElementById('doneBtn').onclick = closeCheckout;
+  }
+
+  function closeCheckout() { overlay.classList.remove('open'); }
+
+  document.getElementById('buyBtn').addEventListener('click', openCheckout);
+  document.getElementById('modalClose').addEventListener('click', closeCheckout);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeCheckout(); });
+</script>
+</body>
+</html>
